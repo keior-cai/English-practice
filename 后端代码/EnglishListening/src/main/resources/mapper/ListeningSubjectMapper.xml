@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.english.listening.mapper.ListeningSubjectMapper">
+    <insert id="addAllListeningSubject">
+        INSERT INTO listening_subject(option_A,option_B,option_C,option_D,answer,subject_title)
+        <foreach collection="listeningSubject" item="item" open="values" separator=",">
+            (#{item.optionA},#{item.optionB},#{item.optionC},#{item.optionD},#{item.answer},#{item.subjectTitle})
+        </foreach>
+    </insert>
+</mapper>

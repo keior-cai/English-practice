@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.english.listening.mapper.ClassHomeWorkMapper">
+    <insert id="addClassHomeWork">
+        INSERT INTO  class_homework(homework_type,
+          <if test="oralLanguageId !=null">
+              oral_language_id,
+          </if>
+          <if test="num != null">
+              num,
+          </if>
+          class_id
+        )
+        VALUES (#{homeworkType},
+        <if test="oralLanguageId != null ">
+            #{oralLanguageId},
+        </if>
+        <if test="num != null">
+            #{num},
+        </if>
+        #{classId}
+        )
+    </insert>
+    <select id="selectOralLanguageHomeWorkByClass"
+            resultType="com.english.listening.vo.OralLanguageHomeWorkVO">
+        SELECT
+        si.student_number AS sno,
+        si.student_name AS `name`,
+        <if test="homeWorkType == 0">
+            ol.oral_language_text,
+        </if>
+        <if test="homeWorkType == 0">
+            sh.home_work_path,
+            sh.long_text,
+        </if>
+        <if test="homeWorkType == 1">
+            sh.student_home_work_score,
+            ls.subject_title,
+        </if>
+        sh.status,
+        si.sex
+        FROM class_homework AS  ch
+        JOIN student_class_info AS sci ON (sci.class_id = ch.class_id AND sci.delete = 0)
+        RIGHT JOIN student_homework AS sh ON sh.class_home_work_id = ch.homework_id
+        <if test="homeWorkType == 0">
+            JOIN oral_language AS ol ON ch.oral_language_id = ol.oral_language_id
+        </if>
+        RIGHT JOIN student_info AS  si ON (si.student_id = sci.student_id AND si.delete = 0)
+        <if test="homeWorkType == 1">
+            LEFT JOIN home_work_history AS hwh ON si.student_id = hwh.student_id
+            LEFT JOIN listening_subject AS ls ON ls.subject_id = hwh.listening_id
+        </if>
+        WHERE ch.class_id = #{classId} AND ch.homework_type = #{homeWorkType} AND ch.`delete` = 0
+    </select>
+</mapper>

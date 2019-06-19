@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.english.listening.mapper.StudentInfoMapper">
+    <select id="selectAllByIdList" resultType="com.english.listening.pojo.StudentInfo">
+        SELECT * FROM student_info WHERE  `delete` = 0 AND student_id IN
+        <foreach collection="numberList" open="(" separator="," close=")" item="item">
+            #{item}
+        </foreach>
+    </select>
+</mapper>
